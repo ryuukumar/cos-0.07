@@ -17,7 +17,7 @@ echo -e "\e[1;33m\n# ---+\n# Populating ISO directory\n# ---+\n\e[0m"
 mkdir -p iso_root
  
 # Copy the relevant files over.
-cp -v myos.elf limine.cfg limine/limine.sys \
+cp -v build/myos.elf limine.cfg limine/limine.sys \
       limine/limine-cd.bin limine/limine-cd-efi.bin iso_root/
  
 # Create the EFI boot tree and copy Limine's EFI executables over.
