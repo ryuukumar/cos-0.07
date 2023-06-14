@@ -1,9 +1,34 @@
 
-echo -e "\e[1;33m\n# ---+\n# Building OS binaries\n# ---+\n\e[0m"
+function heading() {
+  input_string=$1
+  string_length=${#input_string}
+  line_char="-"
+
+  # Output hashtags
+  final_string=""
+  for ((i=1; i<=string_length+4; i++))
+  do
+    final_string+=$line_char
+  done
+  final_string+="\n"  # Add a newline after the hashtags
+  
+  final_string+="# ${input_string} #\n"
+  
+  # Output hashtags
+  for ((i=1; i<=string_length+4; i++))
+  do
+    final_string+=$line_char
+  done
+  final_string+="\n"  # Add a newline after the hashtags
+
+  echo -e "$final_string"
+}
+
+echo -e "\e[1;33m\n$(heading "Building OS binaries")\n\e[0m"
 
 make -j4
 
-echo -e "\e[1;33m\n# ---+\n# Building Limine-deploy\n# ---+\n\e[0m"
+echo -e "\e[1;33m\n$(heading "Building Limine-deploy")\n\e[0m"
 
 # Download the latest Limine binary release.
 git clone https://github.com/limine-bootloader/limine.git --branch=v4.x-branch-binary --depth=1
@@ -11,7 +36,7 @@ git clone https://github.com/limine-bootloader/limine.git --branch=v4.x-branch-b
 # Build limine-deploy.
 make -C limine
 
-echo -e "\e[1;33m\n# ---+\n# Populating ISO directory\n# ---+\n\e[0m"
+echo -e "\e[1;33m\n$(heading "Populating ISO directory")\n\e[0m"
 
 # Create a directory which will be our ISO root.
 mkdir -p iso_root
@@ -24,7 +49,7 @@ cp -v build/myos.elf limine.cfg limine/limine.sys \
 mkdir -p iso_root/EFI/BOOT
 cp -v limine/BOOT*.EFI iso_root/EFI/BOOT/
  
-echo -e "\e[1;33m\n# ---+\n# Creating ISO\n# ---+\n\e[0m"
+echo -e "\e[1;33m\n$(heading "Creating ISO")\n\e[0m"
  
 # Create the bootable ISO.
 xorriso -as mkisofs -b limine-cd.bin \
@@ -37,4 +62,4 @@ xorriso -as mkisofs -b limine-cd.bin \
 # Install Limine stage 1 and 2 for legacy BIOS boot.
 ./limine/limine-deploy image.iso
 
-echo -e "\e[1;32m\n# ---+\n# ISO generated successfully\n# ---+\n\e[0m"
+echo -e "\e[1;32m\n$(heading "ISO generated successfully")\n\e[0m"
