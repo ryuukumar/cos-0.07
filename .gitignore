@@ -1,3 +1,5 @@
 build
 limine
 *.iso
+iso_root
+*.o
