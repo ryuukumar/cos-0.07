@@ -29,10 +29,12 @@ void putPixel (uint32_t color, int x, int y) {
 }
 
 
-void renderGlyph(unsigned char* glyph, int gh, int gw, size_t posx, size_t posy) {
+void renderGlyph(unsigned char* glyph, int gh, int gw, size_t posx, size_t posy, int size_mult, uint32_t color) {
 	for (int i=0; i<gh; i++)
 		for (int j=0; j<gw; j++)
-			putPixel(0xffffff*glyph[i*gw+j], posx+j, posy+i);
+			for (int kx=0; kx<size_mult; kx++)
+				for (int ky=0; ky<size_mult; ky++)
+					putPixel(color*glyph[i*gw+j], posx+(j*size_mult)+kx, posy+(i*size_mult)+ky);
 }
 
 void drawBorder (int padding) {
