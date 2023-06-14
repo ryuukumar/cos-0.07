@@ -3,6 +3,7 @@
 #include <limine.h>
 
 #include <graphics.h>
+#include <console.h>
 #include <hardfonts/classic.h>
 
 #define FONT_SIZE   2
@@ -41,10 +42,14 @@ void _start(void) {
     __init_graphics__(framebuffer);
     drawBorder(20);
 
-    for (int i=0; i<23; i++)
-        renderGlyph(glyph(i+32), 
-                    8, 5, 50+(FONT_SIZE*i*7), 
-                    50, FONT_SIZE, 0xee1111);
+    __init_console__(framebuffer->width, framebuffer->height,
+                        40, 40, 1, 1, 2);
+    set_color(0xddeecc);
+
+    //putchar('!');
+
+    for (int i=0; i<120; i++)
+        putchar('-');
  
     // We're done, just hang...
     hcf();
