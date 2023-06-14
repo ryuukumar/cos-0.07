@@ -3,7 +3,7 @@ override MAKEFLAGS += -rR
  
 # This is the name that our final kernel executable will have.
 # Change as needed.
-override KERNEL := myos.elf
+override KERNEL := entry.elf
  
 # Convenience macro to reliably declare user overridable variables.
 define DEFAULT_VAR =

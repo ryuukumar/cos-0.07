@@ -1,8 +1,8 @@
 
 echo -e "\e[1;33m\n# ---+\n# Removing all build files\n# ---+\n\e[0m"
 
-rm -rvf build
-rm -rvf limine
+rm -rf build
+rm -rf limine
 
 echo -e "\e[1;33m\n# ---+\n# Removing ISO image\n# ---+\n\e[0m"
 

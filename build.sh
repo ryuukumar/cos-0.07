@@ -28,6 +28,8 @@ echo -e "\e[1;33m\n$(heading "Building OS binaries")\n\e[0m"
 
 make -j4
 
+echo -e "\nentry.elf generated with size $(wc -c <"build/entry.elf") bytes"
+
 echo -e "\e[1;33m\n$(heading "Building Limine-deploy")\n\e[0m"
 
 # Download the latest Limine binary release.
@@ -42,7 +44,7 @@ echo -e "\e[1;33m\n$(heading "Populating ISO directory")\n\e[0m"
 mkdir -p iso_root
  
 # Copy the relevant files over.
-cp -v build/myos.elf limine.cfg limine/limine.sys \
+cp -v build/entry.elf limine.cfg limine/limine.sys \
       limine/limine-cd.bin limine/limine-cd-efi.bin iso_root/
  
 # Create the EFI boot tree and copy Limine's EFI executables over.
@@ -61,5 +63,7 @@ xorriso -as mkisofs -b limine-cd.bin \
  
 # Install Limine stage 1 and 2 for legacy BIOS boot.
 ./limine/limine-deploy image.iso
+
+echo -e "\nimage.iso generated with size $(wc -c <"image.iso") bytes"
 
 echo -e "\e[1;32m\n$(heading "ISO generated successfully")\n\e[0m"

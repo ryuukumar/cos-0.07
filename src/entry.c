@@ -3,6 +3,7 @@
 #include <limine.h>
 
 #include <graphics.h>
+#include <hardfonts/classic.h>
  
 // The Limine requests can be placed anywhere, but it is important that
 // the compiler does not optimise them away, so, usually, they should
@@ -94,6 +95,9 @@ void _start(void) {
 
     __init_graphics__(framebuffer);
     drawBorder(20);
+
+    unsigned char* myglyph = glyph(0);
+    renderGlyph(myglyph, 8, 5, 50, 50);
  
     // We're done, just hang...
     hcf();
