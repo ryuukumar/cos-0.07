@@ -50,10 +50,12 @@ void _start(void) {
 
     //for (int i=0; i<120; i++)
     //    putchar('-');
-    for (int i=32; i<127; i++)
-        putchar(i);
-    putchar('a');
-    putchar('}');
+    //for (int i=32; i<127; i++)
+    //    putchar(i);
+    //putchar('a');
+    //putchar('}');
+
+    putstr("COS 0.07\n\nHello, World!", 24);
  
     // We're done, just hang...
     hcf();

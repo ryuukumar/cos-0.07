@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include <hardfonts/classic.h>
 #include <memory.h>
@@ -11,6 +12,8 @@ size_t x, y, xs, ys, xsp, ysp, xc, yc, fs;
 size_t idx = 0;
 
 uint32_t color = 0xeeeeee;
+
+bool PUTCH_UPDATE = false;
 
 // starts a console with the classic font
 void __init_console__ (size_t x_screen, size_t y_screen, size_t x_pad, size_t y_pad, size_t x_spc, size_t y_spc, size_t font_size) {
@@ -50,6 +53,17 @@ void registerChar(unsigned char rc, int index) {
 }
 
 void putchar(unsigned char rc) {
+	switch (rc) {
+		case '\n':
+			idx = xc*((idx/xc)+1);
+			return;
+	}
 	registerChar(rc, idx);
-	idx++; update();
+	idx++;
+	if (PUTCH_UPDATE) update();
+}
+
+void putstr(const char* str, size_t len) {
+	for (size_t i=0; i<len; i++) putchar(str[i]);
+	update();
 }
