@@ -20,3 +20,5 @@ sudo chmod +x build.sh   # I suggest going through this script before running it
 ```
 
 This will generate a file `image.iso` inside your working directory. Use VMWare or your favourite VM emulator (or put it on a liveCD if you're brave enough) to run and test it out.
+
+![An image of COS saying 'Hello, world!'](images/hello%20world.png)
