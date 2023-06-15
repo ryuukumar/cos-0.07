@@ -48,8 +48,10 @@ void _start(void) {
 
     //putchar('!');
 
-    for (int i=0; i<120; i++)
-        putchar('-');
+    //for (int i=0; i<120; i++)
+    //    putchar('-');
+    for (int i=32; i<91; i++)
+        putchar(i);
  
     // We're done, just hang...
     hcf();
