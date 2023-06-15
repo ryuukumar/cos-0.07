@@ -50,8 +50,10 @@ void _start(void) {
 
     //for (int i=0; i<120; i++)
     //    putchar('-');
-    for (int i=32; i<91; i++)
+    for (int i=32; i<127; i++)
         putchar(i);
+    putchar('a');
+    putchar('}');
  
     // We're done, just hang...
     hcf();
