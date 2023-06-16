@@ -24,6 +24,40 @@ function heading() {
   echo -e "$final_string"
 }
 
+echo -e "\e[1;33m\n$(heading "Checking for compilers")\n\e[0m"
+
+if ! command -v x86_64-elf-gcc &> /dev/null; then
+	echo -e "\e[1;31m\n$(heading "ERROR: x86_64-elf-gcc not found.")\n\e[0m"
+	echo -e "You probably don't have a cross-compiler installed, or it is in the wrong path. Please refer online on how you can build and install one."
+	exit
+else
+	echo -e "x86_64-elf-gcc found"
+fi
+
+if ! command -v x86_64-elf-g++ &> /dev/null; then
+	echo -e "\e[1;31m\n$(heading "ERROR: x86_64-elf-g++ not found.")\n\e[0m"
+	echo -e "You probably don't have a cross-compiler installed, or it is in the wrong path. Please refer online on how you can build and install one."
+	exit
+else
+	echo -e "x86_64-elf-g++ found"
+fi
+
+if ! command -v x86_64-elf-as &> /dev/null; then
+	echo -e "\e[1;31m\n$(heading "ERROR: x86_64-elf-as not found.")\n\e[0m"
+	echo -e "You probably don't have a cross-compiler installed, or it is in the wrong path. Please refer online on how you can build and install one."
+	exit
+else
+	echo -e "x86_64-elf-as found"
+fi
+
+if ! command -v nasm &> /dev/null; then
+	echo -e "\e[1;31m\n$(heading "ERROR: nasm not found.")\n\e[0m"
+	echo -e "nasm can be simply installed with: sudo apt install nasm"
+	exit
+else
+	echo -e "nasm found"
+fi
+
 echo -e "\e[1;33m\n$(heading "Building OS binaries")\n\e[0m"
 
 make -j4
