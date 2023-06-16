@@ -5,13 +5,15 @@
 #include <graphics.h>
 #include <console.h>
 #include <hardfonts/classic.h>
+#include <gdt.h>
+#include <stack.h>
 
 #define FONT_SIZE   2
  
 // The Limine requests can be placed anywhere, but it is important that
 // the compiler does not optimise them away, so, usually, they should
 // be made volatile or equivalent.
- 
+
 static volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
     .revision = 0
@@ -38,6 +40,9 @@ void _start(void) {
     // Fetch the first framebuffer.
     // Note: we assume the framebuffer model is RGB with 32-bit pixels.
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
+
+    gdt_init();
+    //tss_init();
 
     __init_graphics__(framebuffer);
     drawBorder(20);
