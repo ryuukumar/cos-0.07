@@ -15,7 +15,6 @@ Setting up should be pretty easy, assuming you have a x86_64-elf targeting cross
 ```
 git clone https://github.com/ryuukumar/cos-0.07.git
 cd cos-0.07
-sudo chmod +x build.sh   # I suggest going through this script before running it
 ./build.sh
 ```
 
