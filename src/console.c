@@ -5,23 +5,28 @@
 #include <hardfonts/classic.h>
 #include <memory.h>
 #include <console.h>
+#include <string.h>
 
-unsigned char bufferstr [60*40];		//TODO: replace this with malloc when implemented
+#define 	CONSOLE_HEIGHT		40
+#define		CONSOLE_WIDTH		60
+
+bool		PUTCH_UPDATE = 		false;
+size_t		TAB_WIDTH = 		4;
+
+unsigned char bufferstr [CONSOLE_HEIGHT*CONSOLE_WIDTH];		//TODO: replace this with malloc when implemented
 unsigned char* buffer = bufferstr;
 size_t x, y, xs, ys, xsp, ysp, xc, yc, fs;
 size_t idx = 0;
 
 uint32_t color = 0xeeeeee;
 
-bool PUTCH_UPDATE = false;
-
 // starts a console with the classic font
 void __init_console__ (size_t x_screen, size_t y_screen, size_t x_pad, size_t y_pad, size_t x_spc, size_t y_spc, size_t font_size) {
 	x = x_screen - 2 * x_pad;
 	y = y_screen - 2 * y_pad;
 
-	xc = (x/((5+x_spc)*font_size)>60) ? 60 : x/((5+x_spc)*font_size);
-	yc = (y/((8+y_spc)*font_size)>40) ? 40 : y/((8+y_spc)*font_size);
+	xc = (x/((5+x_spc)*font_size)>CONSOLE_WIDTH) ? CONSOLE_WIDTH : x/((5+x_spc)*font_size);
+	yc = (y/((8+y_spc)*font_size)>CONSOLE_HEIGHT) ? CONSOLE_HEIGHT : y/((8+y_spc)*font_size);
 
 	xsp = x_spc;
 	ysp = y_spc;
@@ -66,4 +71,22 @@ void putchar(unsigned char rc) {
 void putstr(const char* str, size_t len) {
 	for (size_t i=0; i<len; i++) putchar(str[i]);
 	update();
+}
+
+void printf(const char* format, ...) {
+	bool buf = PUTCH_UPDATE;
+	PUTCH_UPDATE = false;
+	for (size_t i=0; i<strlen(format); i++) {
+		switch(format[i]) {
+			case '%':
+				putchar('%'); break;
+			case '\t':
+				idx += (TAB_WIDTH - idx % TAB_WIDTH);
+				break;
+			default:
+				putchar(format[i]);
+		}
+	}
+	update();
+	PUTCH_UPDATE = buf;
 }
