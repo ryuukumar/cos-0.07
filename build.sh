@@ -58,6 +58,10 @@ else
 	echo -e "nasm found"
 fi
 
+echo -e "\e[1;33m\n$(heading "Building documentation")\n\e[0m"
+
+doxygen Doxyfile
+
 echo -e "\e[1;33m\n$(heading "Building OS binaries")\n\e[0m"
 
 make -j4

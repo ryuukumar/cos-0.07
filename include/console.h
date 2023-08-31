@@ -11,4 +11,6 @@ void update();
 void putchar(unsigned char);
 void putstr(const char*, size_t);
 
+void printf(const char*, ...);
+
 #endif

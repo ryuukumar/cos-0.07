@@ -49,9 +49,17 @@ void _start(void) {
 
     __init_console__(framebuffer->width, framebuffer->height,
                         40, 40, 1, 1, 2);
+
+    char outstr [5] = "v0.0\0";
+    const char* version = &outstr;
+
     set_color(0xddeecc);
 
-    printf("\t\tCOS 0.07\n\nHello, World!\n\n");
+    printf("\t\tCOS %s%d", version, 7);
+
+    set_color(0x99eeaa);
+
+    printf("\n\nHello, World!");
  
     // We're done, just hang...
     hcf();

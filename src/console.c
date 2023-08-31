@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdarg.h>
 
 #include <hardfonts/classic.h>
 #include <memory.h>
@@ -74,12 +75,41 @@ void putstr(const char* str, size_t len) {
 }
 
 void printf(const char* format, ...) {
+	va_list args;
+	va_start (args, format);
+
 	bool buf = PUTCH_UPDATE;
 	PUTCH_UPDATE = false;
 	for (size_t i=0; i<strlen(format); i++) {
 		switch(format[i]) {
 			case '%':
-				putchar('%'); break;
+				{
+					switch (format[++i]) {
+						case 's':
+						{
+							const char* str = va_arg(args, const char*);
+							putstr(str, strlen(str));
+						} break;
+						case 'd':
+						case 'i':
+						{
+							char buf [33] = {0};
+							itos(va_arg(args, int32_t), buf, 10);
+							putstr(buf, strlen(buf));
+						} break;
+						case 'x':
+						{
+							char buf [33] = {0};
+							itos(va_arg(args, int32_t), buf, 16);
+							putstr(buf, strlen(buf));
+						} break;
+						default:
+						{
+							putchar('%');
+							putchar(format[i]);
+						}
+					}
+				} break;
 			case '\t':
 				idx += (TAB_WIDTH - idx % TAB_WIDTH);
 				break;

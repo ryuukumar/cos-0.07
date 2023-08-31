@@ -4,3 +4,4 @@ limine
 iso_root
 *.o
 .vscode
+docs
