@@ -19,7 +19,7 @@ void reverse (char* str) {
 void itos (int32_t i, char* buf, int32_t b) {
     int ctr = 0;
     while(i) {
-        buf[ctr++] = i%b;
+        buf[ctr++] = '0' + i%b;
         i/=b;
     }
     reverse(buf);

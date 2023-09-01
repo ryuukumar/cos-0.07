@@ -27,9 +27,9 @@ static void hcf(void) {
     }
 }
  
-// The following will be our kernel's entry point.
-// If renaming _start() to something else, make sure to change the
-// linker script accordingly.
+/*!
+Entry point of kernel. Everything is set up here.
+*/
 void _start(void) {
     // Ensure we got a framebuffer.
     if (framebuffer_request.response == NULL
@@ -50,16 +50,13 @@ void _start(void) {
     __init_console__(framebuffer->width, framebuffer->height,
                         40, 40, 1, 1, 2);
 
-    char outstr [5] = "v0.0\0";
-    const char* version = &outstr;
-
     set_color(0xddeecc);
 
-    printf("\t\tCOS %s%d", version, 7);
+    printf("COS 0.0%d", 7);
 
     set_color(0x99eeaa);
 
-    printf("\n\nHello, World!");
+    printf("\n\n\tHello, World!");
  
     // We're done, just hang...
     hcf();

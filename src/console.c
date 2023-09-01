@@ -1,7 +1,6 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include <stdarg.h>
 
 #include <hardfonts/classic.h>
 #include <memory.h>
@@ -12,7 +11,6 @@
 #define		CONSOLE_WIDTH		60
 
 bool		PUTCH_UPDATE = 		false;
-size_t		TAB_WIDTH = 		4;
 
 unsigned char bufferstr [CONSOLE_HEIGHT*CONSOLE_WIDTH];		//TODO: replace this with malloc when implemented
 unsigned char* buffer = bufferstr;
@@ -21,7 +19,53 @@ size_t idx = 0;
 
 uint32_t color = 0xeeeeee;
 
-// starts a console with the classic font
+/*!
+Set PUTCH_UPDATE
+
+@param	set value to set to
+*/
+void set_update_on_putch (bool set) {
+	PUTCH_UPDATE = set;
+}
+
+/*!
+Get PUTCH_UPDATE
+
+@return	PUTCH_UPDATE
+*/
+bool get_update_on_putch () {
+	return PUTCH_UPDATE;
+}
+
+/*!
+Set idx
+
+@param	set value to set to
+*/
+void set_idx (size_t set) {
+	idx = set;
+}
+
+/*!
+Get idx
+
+@return	idx
+*/
+size_t get_idx () {
+	return idx;
+}
+
+/*!
+Initialise the console with the default (classic) font
+
+@param	x_screen screen width
+@param	y_screen screen height
+@param	x_pad padding around sides
+@param	y_pad padding around top and bottom
+@param	x_spc spacing between characters
+@param	y_spc spacing between lines
+@param	font_size font size
+*/
 void __init_console__ (size_t x_screen, size_t y_screen, size_t x_pad, size_t y_pad, size_t x_spc, size_t y_spc, size_t font_size) {
 	x = x_screen - 2 * x_pad;
 	y = y_screen - 2 * y_pad;
@@ -40,10 +84,18 @@ void __init_console__ (size_t x_screen, size_t y_screen, size_t x_pad, size_t y_
 	for (int i=0; i<xc*yc; i++) buffer[i] = 32;
 }
 
+/*!
+Set the screen color.
+
+@param	c RGB color
+*/
 void set_color(uint32_t c) {
 	color = c;
 }
 
+/*!
+Update the display.
+*/
 void update() {
 	for (int i=0; i<yc; i++) {
 		for (int j=0; j<xc; j++) {
@@ -54,10 +106,21 @@ void update() {
 	}
 }
 
+/*!
+Register a character to the screen buffer.
+
+@param	rc character to register
+@param	index position to print it on
+*/
 void registerChar(unsigned char rc, int index) {
 	buffer[index] = rc;
 }
 
+/*!
+Print a single character to the screen.
+
+@param	rc character to print
+*/
 void putchar(unsigned char rc) {
 	switch (rc) {
 		case '\n':
@@ -69,54 +132,14 @@ void putchar(unsigned char rc) {
 	if (PUTCH_UPDATE) update();
 }
 
+/*!
+Print a string to the screen.
+
+@param	str string to print
+@param	len length of string
+*/
 void putstr(const char* str, size_t len) {
 	for (size_t i=0; i<len; i++) putchar(str[i]);
 	update();
 }
 
-void printf(const char* format, ...) {
-	va_list args;
-	va_start (args, format);
-
-	bool buf = PUTCH_UPDATE;
-	PUTCH_UPDATE = false;
-	for (size_t i=0; i<strlen(format); i++) {
-		switch(format[i]) {
-			case '%':
-				{
-					switch (format[++i]) {
-						case 's':
-						{
-							const char* str = va_arg(args, const char*);
-							putstr(str, strlen(str));
-						} break;
-						case 'd':
-						case 'i':
-						{
-							char buf [33] = {0};
-							itos(va_arg(args, int32_t), buf, 10);
-							putstr(buf, strlen(buf));
-						} break;
-						case 'x':
-						{
-							char buf [33] = {0};
-							itos(va_arg(args, int32_t), buf, 16);
-							putstr(buf, strlen(buf));
-						} break;
-						default:
-						{
-							putchar('%');
-							putchar(format[i]);
-						}
-					}
-				} break;
-			case '\t':
-				idx += (TAB_WIDTH - idx % TAB_WIDTH);
-				break;
-			default:
-				putchar(format[i]);
-		}
-	}
-	update();
-	PUTCH_UPDATE = buf;
-}

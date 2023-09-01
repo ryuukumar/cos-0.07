@@ -964,6 +964,13 @@ static unsigned char __classic_font__ [96][8][5] = {
 	}
 };
 
+
+/*!
+Return the glyph for a certain character from the classic font
+
+@param	index ascii value of glyph
+@return	pointer to 5x8 glyph
+*/
 unsigned char* glyph(char index) {
 	if (index < 32) return __classic_font__[0];
 	return __classic_font__[index-32];
