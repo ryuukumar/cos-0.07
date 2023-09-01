@@ -1,11 +1,22 @@
 #include <string.h>
 
+/*!
+Get the length of a standard string (terminating with 0).
+
+@param  str pointer to string
+@return string size
+*/
 size_t strlen (const char* str) {
     size_t ret = 0;
     while (str[ret] != 0) ret++;
     return ret;
 }
 
+/*!
+Reverse a standard string (terminating with 0).
+
+@param  str string to reverse
+*/
 void reverse (char* str) {
     int len = strlen(str);
 
@@ -16,6 +27,13 @@ void reverse (char* str) {
     }
 }
 
+/*!
+Convert integer to representative string with base b.
+
+@param  i integer to convert
+@param  buf memory to save integer
+@param  b base
+*/
 void itos (int32_t i, char* buf, int32_t b) {
     int ctr = 0;
     while(i) {
