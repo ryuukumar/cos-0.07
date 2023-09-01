@@ -50,13 +50,13 @@ void _start(void) {
     __init_console__(framebuffer->width, framebuffer->height,
                         40, 40, 1, 1, 2);
 
-    set_color(0xddeecc);
+    set_color(0x44eeaa);
 
     printf("COS 0.0%d", 7);
 
-    set_color(0x99eeaa);
+    set_color(0xddeecc);
 
-    printf("\n\n\tHello, World!");
+    printf("\n\nHello, World!");
  
     // We're done, just hang...
     hcf();

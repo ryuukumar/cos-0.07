@@ -12,8 +12,10 @@
 
 bool		PUTCH_UPDATE = 		false;
 
-unsigned char bufferstr [CONSOLE_HEIGHT*CONSOLE_WIDTH];		//TODO: replace this with malloc when implemented
+unsigned char bufferstr [CONSOLE_HEIGHT*CONSOLE_WIDTH] = {0};		//TODO: replace this with malloc when implemented
+uint32_t colorbufferstr [CONSOLE_HEIGHT*CONSOLE_WIDTH] = {0xffffff};		//TODO: replace this with malloc when implemented
 unsigned char* buffer = bufferstr;
+uint32_t* colorbuffer = colorbufferstr;
 size_t x, y, xs, ys, xsp, ysp, xc, yc, fs;
 size_t idx = 0;
 
@@ -101,7 +103,8 @@ void update() {
 		for (int j=0; j<xc; j++) {
 			renderGlyph(glyph(buffer[i*xc+j]), 
                     8, 5, xs+(fs*j*(5+xsp)), 
-                    ys+(fs*i*(8+ysp)), fs, color);
+                    ys+(fs*i*(8+ysp)), fs,
+					colorbuffer[i*xc+j]);
 		}
 	}
 }
@@ -114,6 +117,7 @@ Register a character to the screen buffer.
 */
 void registerChar(unsigned char rc, int index) {
 	buffer[index] = rc;
+	colorbuffer[index] = color;
 }
 
 /*!
