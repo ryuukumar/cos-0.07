@@ -9,13 +9,20 @@
 #include <stack.h>
 
 #define FONT_SIZE   2
- 
-// The Limine requests can be placed anywhere, but it is important that
-// the compiler does not optimise them away, so, usually, they should
-// be made volatile or equivalent.
 
+// volatile so that compiler does not mess with the structure
 static volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
+    .revision = 0
+};
+
+static volatile struct limine_bootloader_info_request bootinfo_req = {
+    .id = LIMINE_BOOTLOADER_INFO_REQUEST,
+    .revision = 0
+};
+
+static volatile struct limine_boot_time_request boottime_req = {
+    .id = LIMINE_BOOT_TIME_REQUEST,
     .revision = 0
 };
  
@@ -56,7 +63,19 @@ void _start(void) {
 
     set_color(0xddeecc);
 
-    printf("\n\nHello, World!");
+    printf("\n\nHello, World!\n\n");
+
+    set_color(0x88aaee);
+    printf("System info:\n");
+    if (bootinfo_req.response != NULL) {
+        set_color(0x888888);
+        printf("Bootloader: %s %s", bootinfo_req.response->name, bootinfo_req.response->version);
+    } else printf("\nDid not receive bootloader info from bootloader.\n");
+
+    if (boottime_req.response != NULL) {
+        set_color(0x888888);
+        printf("\nSystem booted at time %d.\n", boottime_req.response->boot_time);
+    } else printf("\nDid not receive boot time from Limine.\n");
  
     // We're done, just hang...
     hcf();
