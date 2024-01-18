@@ -7,6 +7,7 @@
 #include <hardfonts/classic.h>
 #include <gdt.h>
 #include <stack.h>
+#include <memmgt.h>
 
 #define FONT_SIZE   2
 
@@ -23,6 +24,11 @@ static volatile struct limine_bootloader_info_request bootinfo_req = {
 
 static volatile struct limine_boot_time_request boottime_req = {
     .id = LIMINE_BOOT_TIME_REQUEST,
+    .revision = 0
+};
+
+static volatile struct limine_memmap_request memmap_req = {
+    .id = LIMINE_MEMMAP_REQUEST ,
     .revision = 0
 };
  
@@ -55,7 +61,9 @@ void _start(void) {
     drawBorder(20);
 
     __init_console__(framebuffer->width, framebuffer->height,
-                        40, 40, 1, 1, 2);
+                        40, 40, 1, 1, 3);
+
+    // init_memmgt();
 
     set_color(0x44eeaa);
 
@@ -65,7 +73,7 @@ void _start(void) {
 
     printf("\n\nHello, World!\n\n");
 
-    set_color(0x88aaee);
+    set_color(0x88  aaee);
     printf("System info:\n");
     if (bootinfo_req.response != NULL) {
         set_color(0x888888);
@@ -74,8 +82,25 @@ void _start(void) {
 
     if (boottime_req.response != NULL) {
         set_color(0x888888);
-        printf("\nSystem booted at time %d.\n", boottime_req.response->boot_time);
+        printf("\nSystem booted at time %ld.\n", boottime_req.response->boot_time);
     } else printf("\nDid not receive boot time from Limine.\n");
+
+    /*
+    printf("\n\n");
+    uint64_t cr3;
+    __asm__ volatile ("mov %%cr3, %0" : "=r" (cr3));
+    cr3 = cr3 & 0xFFFFFFFFFF000;
+
+    printf("CR3: %lx", cr3);
+    */
+
+    if (memmap_req.response != NULL) {
+        for (uint64_t i=0; i<memmap_req.response->entry_count; i++) {
+            printf("%d: 0x%lx to 0x%lx | type %d\n", i, memmap_req.response->entries[i]->base,
+                memmap_req.response->entries[i]->base + memmap_req.response->entries[i]->length - 1,
+                memmap_req.response->entries[i]->type);
+        }
+    }
  
     // We're done, just hang...
     hcf();

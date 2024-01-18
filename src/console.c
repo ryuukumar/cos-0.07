@@ -7,8 +7,8 @@
 #include <console.h>
 #include <string.h>
 
-#define 	CONSOLE_HEIGHT		40
-#define		CONSOLE_WIDTH		60
+#define 	CONSOLE_HEIGHT		80
+#define		CONSOLE_WIDTH		140
 
 bool		PUTCH_UPDATE = 		false;
 
@@ -129,6 +129,7 @@ void putchar(unsigned char rc) {
 	switch (rc) {
 		case '\n':
 			idx = xc*((idx/xc)+1);
+			while (idx >= CONSOLE_HEIGHT*CONSOLE_WIDTH) idx -= CONSOLE_HEIGHT*CONSOLE_WIDTH;
 			return;
 	}
 	registerChar(rc, idx);
